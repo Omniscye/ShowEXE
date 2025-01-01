@@ -296,12 +296,12 @@ let analyser;
 let dataArray;
 let lastClickTime = 0;
 let visualizerStarted = false;
-let glitchSound;
+let Sound;
 let errorSound;
 function initAudio() {
   if (!audioContext) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    audioElement = new Audio('/CodFish-Codex.mp3');
+    audioElement = new Audio('CodFish-Codex.mp3');
     audioElement.loop = true;
     const source = audioContext.createMediaElementSource(audioElement);
     analyser = audioContext.createAnalyser();
@@ -411,7 +411,7 @@ document.getElementById('runButton').addEventListener('click', function () {
   if (audioElement) {
     audioElement.pause();
   }
-  glitchSound = new Audio('/Glitch.mp3');
+  glitchSound = new Audio('Glitch.mp3');
   glitchSound.play();
   const gameTitle = document.getElementById('gameTitle');
   gameTitle.style.display = 'block';
@@ -420,7 +420,7 @@ document.getElementById('runButton').addEventListener('click', function () {
     setTimeout(() => {
       gameTitle.style.display = 'none';
       glitchSound.pause();
-      errorSound = new Audio('/Error.mp3');
+      errorSound = new Audio('Error.mp3');
       errorSound.play();
       document.getElementById('errorWindow').style.display = 'block';
     }, 800);
