@@ -1,0 +1,467 @@
+<html><head>
+<style>
+body {
+    background: #000;
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+}
+
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 20px;
+}
+
+.icon-container {
+    text-align: center;
+    cursor: pointer;
+    width: 80px;
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto;
+    background: #1a1a1a;
+    border: 1px solid #00ff00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.icon-text {
+    color: #fff;
+    font-size: 12px;
+    word-wrap: break-word;
+}
+
+.window {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    width: 600px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,255,0,0.2);
+    display: none;
+}
+
+.title-bar {
+    background: linear-gradient(90deg, #000, #1a1a1a);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #00ff00;
+    font-family: 'Consolas', monospace;
+}
+
+.close-btn {
+    background: #333;
+    border: 1px solid #00ff00;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #00ff00;
+}
+
+.content {
+    padding: 20px;
+    color: #00ff00;
+}
+
+.ascii-art {
+    font-family: 'Consolas', monospace;
+    white-space: pre;
+    color: #00ff00;
+    background: #000;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 14px;
+    border: 1px solid #00ff00;
+}
+
+.progress {
+    width: 100%;
+    height: 25px;
+    background: #000;
+    border: 1px solid #00ff00;
+    margin: 15px 0;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #000, #00ff00);
+    transition: width 0.5s;
+}
+
+.button {
+    background: #000;
+    border: 1px solid #00ff00;
+    padding: 8px 20px;
+    margin: 8px;
+    cursor: pointer;
+    color: #00ff00;
+    font-family: 'Consolas', monospace;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    background: #00ff00;
+    color: #000;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#visualizer {
+    width: 100%;
+    height: 80px;
+    background: #000;
+    margin: 15px 0;
+    border: 1px solid #00ff00;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: #00ff00;
+    animation: blink 1s infinite;
+}
+
+.run-button {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.run-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+.game-title {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 72px;
+    font-family: 'Arial', sans-serif;
+    color: #ff0000;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.glitch {
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(-50%, -50%) skew(0deg); }
+    20% { transform: translate(-52%, -48%) skew(-4deg); filter: hue-rotate(90deg); }
+    40% { transform: translate(-49%, -51%) skew(2deg); filter: hue-rotate(180deg); }
+    60% { transform: translate(-51%, -49%) skew(-4deg); filter: hue-rotate(270deg); }
+    80% { transform: translate(-48%, -52%) skew(4deg); filter: hue-rotate(360deg); }
+    100% { transform: translate(-50%, -50%) skew(0deg); }
+}
+
+.error-window {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f0f0f0;
+    border: 1px solid #999;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    padding: 20px;
+    font-family: "Segoe UI", sans-serif;
+    color: #000;
+}
+
+.error-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.error-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.error-title {
+    font-weight: bold;
+}
+
+.error-button {
+    background: #e1e1e1;
+    border: 1px solid #999;
+    padding: 5px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    float: right;
+}
+
+@media (max-width: 768px) {
+  .window {
+    width: 90%;
+    margin: 10px;
+  }
+
+  .desktop {
+    padding: 10px;
+  }
+
+  .icon-container {
+    width: 60px;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon-text {
+    font-size: 10px;
+  }
+
+  .ascii-art {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .error-window {
+    width: 90%;
+  }
+
+  .game-title {
+    font-size: 48px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="desktop">
+    <div class="icon-container" id="exe-icon">
+        <div class="icon">
+            <svg width="32" height="32" viewBox="0 0 32 32">
+                <rect x="2" y="2" width="28" height="28" fill="none" stroke="#00ff00" stroke-width="2"/>
+                <text x="16" y="20" fill="#00ff00" font-size="14" text-anchor="middle">EXE</text>
+            </svg>
+        </div>
+        <div class="icon-text">Showrunner.exe</div>
+    </div>
+</div>
+
+<div class="window" id="installer">
+    <div class="title-bar">
+        <div>RYU.2025 - SHOWRUNNER v1.0 [ELITE EDITION]</div>
+        <div class="close-btn">&#xd7;</div>
+    </div>
+    <div class="content">
+        <div class="ascii-art">
+&#x2588;&#x2580;&#x2588; &#x2588;&#x2591;&#x2588; &#x2588;&#x2591;&#x2588;
+&#x2588;&#x2580;&#x2584; &#x2580;&#x2584;&#x2580; &#x2588;&#x2584;&#x2588;
+&gt;&gt; SHOWRUNNER.2025.ELITE.EDITION
+&gt;&gt; CRACKED BY TEAM RYU
+&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;&#x2501;
+        </div>
+        <canvas id="visualizer"></canvas>
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
+        <div id="status" style="font-family: &apos;Consolas&apos;, monospace; margin: 10px 0;">Click icon twice to launch...</div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="button" onclick="startInstall()">INSTALL</button>
+        </div>
+    </div>
+</div>
+
+<button class="run-button" id="runButton">Run Now?</button>
+<div class="game-title" id="gameTitle">SHOWRUNNER</div>
+<div class="error-window" id="errorWindow">
+    <div class="error-header">
+        <svg class="error-icon" viewBox="0 0 32 32">
+            <circle cx="16" cy="16" r="15" fill="#ff0000"/>
+            <text x="16" y="22" text-anchor="middle" fill="white" font-size="20">!</text>
+        </svg>
+        <div class="error-title">System Error</div>
+    </div>
+    <div class="error-message">Edward caught us, game over.</div>
+    <button class="error-button" onclick="closeError()">OK</button>
+</div>
+
+<script>let audioContext;
+let audioElement;
+let analyser;
+let dataArray;
+let visualizerStarted = false;
+let glitchSound;
+let errorSound;
+function initAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioElement = new Audio('CodFish-Codex.mp3');
+    audioElement.loop = true;
+    const source = audioContext.createMediaElementSource(audioElement);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    if (!visualizerStarted) {
+      visualize();
+      visualizerStarted = true;
+    }
+  }
+}
+const canvas = document.getElementById('visualizer');
+const ctx = canvas.getContext('2d');
+let audioRunning = true;
+function visualize() {
+  if (!audioRunning) return;
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (analyser && audioElement && !audioElement.paused) {
+    analyser.getByteFrequencyData(dataArray);
+    const barWidth = canvas.width / dataArray.length * 2.5;
+    let x = 0;
+    ctx.fillStyle = '#00ff00';
+    for (let i = 0; i < dataArray.length; i++) {
+      const height = dataArray[i] / 255 * canvas.height;
+      ctx.fillRect(x, canvas.height - height, barWidth - 1, height);
+      x += barWidth;
+    }
+  }
+  requestAnimationFrame(visualize);
+}
+document.getElementById('exe-icon').addEventListener('click', function () {
+  document.getElementById('installer').style.display = 'block';
+  this.style.display = 'none';
+  startTypeWriter();
+  initAudio();
+});
+function startInstall() {
+  document.querySelector('.button').disabled = true;
+  const progressBar = document.querySelector('.progress-bar');
+  const status = document.getElementById('status');
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 5;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      status.textContent = '[SUCCESS] Installation Complete! Enjoy SHOWRUNNER v1.0 ELITE EDITION';
+      setTimeout(() => {
+        document.getElementById('runButton').style.display = 'block';
+      }, 1000);
+    } else {
+      status.textContent = `[INSTALLING] Progress: ${Math.floor(progress)}%`;
+    }
+    progressBar.style.width = `${progress}%`;
+  }, 200);
+}
+const startupText = ['[INIT] Loading RYU.2025 Installer...', '[OK] Audio subsystem initialized', '[OK] Ready to install SHOWRUNNER.2025.ELITE'];
+function startTypeWriter() {
+  const status = document.getElementById('status');
+  const installButton = document.querySelector('.button');
+  installButton.disabled = true;
+  let lineIndex = 0;
+  let charIndex = 0;
+  function typeLine() {
+    if (lineIndex < startupText.length) {
+      if (charIndex < startupText[lineIndex].length) {
+        status.textContent = startupText[lineIndex].substring(0, charIndex + 1);
+        charIndex++;
+        setTimeout(typeLine, 50);
+      } else {
+        if (startupText[lineIndex].includes('Audio subsystem initialized')) {
+          audioElement.play();
+        }
+        if (startupText[lineIndex].includes('Ready to install')) {
+          installButton.disabled = false;
+        }
+        charIndex = 0;
+        lineIndex++;
+        setTimeout(typeLine, 500);
+      }
+    }
+  }
+  typeLine();
+}
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+document.querySelector('.close-btn').addEventListener('click', () => {
+  audioRunning = false;
+  if (audioElement) audioElement.pause();
+  document.getElementById('installer').style.display = 'none';
+  document.getElementById('exe-icon').style.display = 'block';
+});
+document.getElementById('runButton').addEventListener('click', function () {
+  this.style.display = 'none';
+  document.getElementById('installer').style.display = 'none';
+  if (audioElement) {
+    audioElement.pause();
+  }
+  glitchSound = new Audio('Glitch.mp3');
+  glitchSound.play();
+  const gameTitle = document.getElementById('gameTitle');
+  gameTitle.style.display = 'block';
+  setTimeout(() => {
+    gameTitle.classList.add('glitch');
+    setTimeout(() => {
+      gameTitle.style.display = 'none';
+      glitchSound.pause();
+      errorSound = new Audio('Error.mp3');
+      errorSound.play();
+      document.getElementById('errorWindow').style.display = 'block';
+    }, 800);
+  }, 3000);
+});
+function closeError() {
+  document.getElementById('errorWindow').style.display = 'none';
+  document.getElementById('exe-icon').style.display = 'block';
+  if (audioElement) audioElement.pause();
+  if (glitchSound) glitchSound.pause();
+  if (errorSound) errorSound.pause();
+}</script>
+</body></html>
